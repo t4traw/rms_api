@@ -66,8 +66,8 @@ module RmsItemApi
         result_code = parsed_xml.xpath("result/item#{method}Result/code").text
         case method
         when 'Get'
-          puts "#{method} succeeded"
           if result_code == 'N000'
+            puts "#{method} succeeded"
             xpoint = 'result/itemGetResult/item'
             parsed_xml.xpath(xpoint).each do |xml|
               xml.children.each_with_index do |x, index|
