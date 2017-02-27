@@ -78,7 +78,7 @@ item = client.update({
 この機能を利用すると、RMSに登録されている商品情報を削除することができます。
 
 ```ruby
-item = client.update({
+item = client.delete({
   item_url: 'test123',
   })
 ```
