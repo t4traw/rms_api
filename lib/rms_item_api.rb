@@ -109,7 +109,7 @@ module RmsItemApi
               xml.children.each do |x|
                 error_field = x.xpath('fieldId').text
                 error_description = x.xpath('msg').text.force_encoding('utf-8')
-                puts error_msg = "#{field_name[error_field]}:#{error_description}"
+                puts "#{field_name[error_field]}:#{error_description}"
               end
             end
           end
