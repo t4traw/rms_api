@@ -19,28 +19,28 @@ module RmsItemApi
 
     def get(item_data)
       result = connection('get').get {|r| r.params['itemUrl'] = item_data}
-      parse_response(result.body, "Get")
+      check_system_status(result.body, "Get")
     end
 
     def update(item_data)
       request_xml = {itemUpdateRequest: {item: item_data}}.to_xml(
         root: 'request', camelize: :lower, skip_types: true)
       result = connection('update').post {|r| r.body = request_xml}
-      parse_response(result.body, "Update")
+      check_system_status(result.body, "Update")
     end
 
     def insert(item_data)
       request_xml = {itemInsertRequest: {item: item_data}}.to_xml(
         root: 'request', camelize: :lower, skip_types: true)
       result = connection('insert').post {|r| r.body = request_xml}
-      parse_response(result.body, "Insert")
+      check_system_status(result.body, "Insert")
     end
 
     def delete(item_data)
       request_xml = {itemDeleteRequest: {item: item_data}}.to_xml(
         root: 'request', camelize: :lower, skip_types: true)
       result = connection('delete').post {|r| r.body = request_xml}
-      parse_response(result.body, "Delete")
+      check_system_status(result.body, "Delete")
     end
 
     private
@@ -61,8 +61,17 @@ module RmsItemApi
         end
       end
 
-      def parse_response(result, method)
+      def check_system_status(result, method)
         parsed_xml = Oga.parse_xml(result)
+        system_status = Oga.parse_xml(result).xpath("result/status/systemStatus").text
+        if system_status == 'NG'
+          raise Oga.parse_xml(result).xpath("result/status/message").text
+        else
+          parse_response(parsed_xml, method)
+        end
+      end
+
+      def parse_response(parsed_xml, method)
         result_code = parsed_xml.xpath("result/item#{method}Result/code").text
         case method
         when 'Get'
@@ -113,7 +122,8 @@ module RmsItemApi
               end
             end
           end
-        end # case method
-      end # def parse_response
+        end # case
+      end # parse_response
+
   end # class rms_item_api
 end # module rms_item_api
