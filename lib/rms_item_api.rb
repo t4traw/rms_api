@@ -15,6 +15,12 @@ module RmsItemApi
     def initialize(serviceSecret:, licenseKey:)
       @serviceSecret = serviceSecret
       @licenseKey = licenseKey
+      @quiet_option = nil
+    end
+
+    def quiet!
+      @quiet_option = true
+      self
     end
 
     def get(item_data)
@@ -76,7 +82,7 @@ module RmsItemApi
         case method
         when 'Get'
           if result_code == 'N000'
-            puts "#{method} succeeded"
+            puts "#{method} succeeded" unless @quiet_option
             xpoint = 'result/itemGetResult/item'
             parsed_xml.xpath(xpoint).each do |xml|
               xml.children.each_with_index do |x, index|
@@ -90,7 +96,7 @@ module RmsItemApi
                         z.text.force_encoding('utf-8')
                       }
                     rescue => e
-                      puts e
+                      puts e unless @quiet_option
                     end
                   end
                 end
@@ -105,11 +111,11 @@ module RmsItemApi
             end
             return self
           else
-            puts "指定された商品管理番号は存在しません"
+            puts "指定された商品管理番号は存在しません" unless @quiet_option
           end
         when 'Update', 'Insert', 'Delete'
           if result_code == 'N000'
-            puts "#{method} succeeded"
+            puts "#{method} succeeded" unless @quiet_option
           else
             config_file = "#{File.dirname(__FILE__)}/../config/field_name.yml"
             field_name = Hashie::Mash.new(YAML.load_file(config_file))
@@ -118,7 +124,7 @@ module RmsItemApi
               xml.children.each do |x|
                 error_field = x.xpath('fieldId').text
                 error_description = x.xpath('msg').text.force_encoding('utf-8')
-                puts "#{field_name[error_field]}:#{error_description}"
+                puts "#{field_name[error_field]}:#{error_description}" unless @quiet_option
               end
             end
           end
