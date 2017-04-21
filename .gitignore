@@ -7,3 +7,4 @@
 /spec/reports/
 /tmp/
 test_code.rb
+*.gem
