@@ -20,7 +20,7 @@ RMS内の「[拡張サービス一覧＞WEB APIサービス＞利用設定](http
 client = RmsItemApi::RmsItemApi.new(
   serviceSecret: "your_serviceSecret",
   licenseKey: "your_licenseKey"
-  )
+)
 ```
 
 ### Get
@@ -53,7 +53,7 @@ item = client.insert({
   },
   item_layout: 2,
   is_included_postage: true
-  })
+})
 ```
 
 ### Update
@@ -70,7 +70,7 @@ item = client.update({
       categoryId: '0000000123'
     }
   }
-  })
+})
 ```
 
 ### Delete
@@ -80,5 +80,5 @@ item = client.update({
 ```ruby
 item = client.delete({
   item_url: 'test123',
-  })
+})
 ```
