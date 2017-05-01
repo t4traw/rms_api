@@ -25,7 +25,7 @@ client = RmsItemApi::RmsItemApi.new(
 
 ### Get
 
-この機能を利用すると、RMSに登録している商品情報を商品管理番号を指定して取得することができます。
+RMSに登録している商品情報を商品管理番号を指定して取得することができます。
 
 ```ruby
 item = client.get('test123')
@@ -38,7 +38,7 @@ item.item_price
 
 ### Insert
 
-この機能を利用すると、RMSに商品情報を登録することができます。
+RMSに商品情報を登録することができます。
 
 ```ruby
 item = client.insert({
@@ -58,7 +58,7 @@ item = client.insert({
 
 ### Update
 
-この機能を利用すると、RMSに登録されている商品情報を更新することができます。
+RMSに登録されている商品情報を更新することができます。
 
 ```ruby
 item = client.update({
@@ -75,7 +75,7 @@ item = client.update({
 
 ### Delete
 
-この機能を利用すると、RMSに登録されている商品情報を削除することができます。
+RMSに登録されている商品情報を削除することができます。
 
 ```ruby
 item = client.delete({
