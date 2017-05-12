@@ -6,7 +6,7 @@ module RmsItemApi
       request_xml = {itemDeleteRequest: {item: item_data}}.to_xml(
         root: 'request', camelize: :lower, skip_types: true)
       result = connection('delete').post {|r| r.body = request_xml}
-      check_system_status(result.body, "Delete")
+      handler(result.body, "Delete")
     end
 
   end

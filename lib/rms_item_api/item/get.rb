@@ -4,7 +4,7 @@ module RmsItemApi
 
     def get(item_data)
       result = connection('get').get {|r| r.params['itemUrl'] = item_data}
-      check_system_status(result.body, "Get")
+      handler(result.body, "Get")
     end
 
   end

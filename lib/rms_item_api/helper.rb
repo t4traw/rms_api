@@ -8,7 +8,7 @@ module RmsItemApi
       end
     end
 
-    def check_system_status(result, method)
+    def handler(result, method)
       parsed_xml = Oga.parse_xml(result)
       system_status = Oga.parse_xml(result).xpath("result/status/systemStatus").text
       if system_status == 'NG'
