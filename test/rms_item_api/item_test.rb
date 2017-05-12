@@ -69,7 +69,7 @@ class RmsItemApiTest < Minitest::Test
 
   def test_item_insert_error
     insert_data = {
-      :itemUrl=>"test1234",
+      itemUrl: "test1234",
     }
     expect_errors = [
       "商品管理番号（商品URL）欄にすでに登録済みのものは指定できません。重複がありましたのでご確認ください。",
@@ -83,6 +83,18 @@ class RmsItemApiTest < Minitest::Test
       assert_equal false, item.is_success?
       assert_equal expect_errors, item.errors
       assert_equal "不要なデータが入っています。", item.message
+    end
+  end
+
+  def test_item_update
+    update_data = {
+      itemUrl: "test1234",
+      itemName: "changed_item",
+    }
+    VCR.use_cassette('item/test_item_update') do
+      assert_equal 'test_item', client.get(update_data[:itemUrl]).item_name
+      assert_equal true, client.update(update_data).is_success?
+      assert_equal 'changed_item', client.get(update_data[:itemUrl]).item_name
     end
   end
 
