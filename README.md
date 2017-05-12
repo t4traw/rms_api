@@ -4,20 +4,21 @@
 
 ## Installation
 
-```
-gem install rms_item_api
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'rms_item_api'
 ```
 ## Usage
 
-取得や更新する項目に関しては楽天RMS WEB APIのドキュメント(要ログイン)にて。
-https://webservice.rms.rakuten.co.jp/merchant-portal/view?page=document0002
+取得や更新する項目に関しては楽天RMS WEB APIのドキュメント「拡張サービス一覧＞WEB APIサービス＞RMS WEB SERVICE : ItemAPI」(要ログイン)にて。
 
 ### Initialize
 
-RMS内の「[拡張サービス一覧＞WEB APIサービス＞利用設定](https://webservice.rms.rakuten.co.jp/merchant-portal/configurationApi)」にあるserviceSecretとlicenseKeyが必要です(事前にWEB APIの利用申し込みが必要)。
+RMS内の「拡張サービス一覧＞WEB APIサービス＞利用設定」にあるserviceSecretとlicenseKeyが必要です(事前にWEB APIの利用申し込みが必要です)。
 
 ```ruby
-client = RmsItemApi::RmsItemApi.new(
+client = RmsItemApi::Client.new(
   serviceSecret: "your_serviceSecret",
   licenseKey: "your_licenseKey"
 )
@@ -30,10 +31,15 @@ RMSに登録している商品情報を商品管理番号を指定して取得�
 ```ruby
 item = client.get('test123')
 
+# 正常なレスポンスが返ってきているかをtrue/falseで返します
+item.is_success?
+
 # 商品名を取得
 item.item_name
 # 表示価格を取得
 item.item_price
+# 全ての取得データをhashで出力します
+item.all
 ```
 
 ### Insert
@@ -54,6 +60,9 @@ item = client.insert({
   item_layout: 2,
   is_included_postage: true
 })
+
+# 正常なレスポンスが返ってきているかをtrue/falseで返します
+item.is_success?
 ```
 
 ### Update
