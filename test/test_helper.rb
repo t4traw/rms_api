@@ -23,3 +23,14 @@ VCR.configure do |c|
   #   i.response.body.sub!(/\"access_token\":\".*\"}$/, '"access_token":"<ACCESS_TOKEN>"}')
   # end
 end
+
+module TestHelper
+  module Client
+    def client
+      RmsItemApi::RmsItemApi.new(
+        serviceSecret: ENV['YOUR_SERVICESECRET'],
+        licenseKey: ENV['YOUR_LICENSEKEY']
+      )
+    end
+  end
+end
