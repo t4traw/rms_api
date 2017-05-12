@@ -1,10 +1,13 @@
 /.bundle/
 /.yardoc
+/Gemfile.lock
 /_yardoc/
 /coverage/
 /doc/
 /pkg/
 /spec/reports/
 /tmp/
-test_code.rb
-*.gem
+
+.env
+.rbenv-gemsets
+sample.rb
