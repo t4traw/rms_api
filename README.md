@@ -1,6 +1,7 @@
 # RmsItemApi
 
 [![Build Status](https://travis-ci.org/t4traw/rms_item_api.svg?branch=master)](https://travis-ci.org/t4traw/rms_item_api)
+[![Code Climate](https://codeclimate.com/github/t4traw/rms_item_api/badges/gpa.svg)](https://codeclimate.com/github/t4traw/rms_item_api)
 
 楽天市場に出店している店舗が使えるRMSの商品APIを叩くためのrubyラッパーです。シンプルなCRUD(作成、取得、更新、削除)のみを実装してあります。検索と複数更新は必要があれば追加したいと思います。
 
