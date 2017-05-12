@@ -9,13 +9,17 @@ module RmsItemApi
       end
     end
 
+    def convert_xml_into_json(xml)
+      Hash.from_xml(xml)
+    end
+
     def convert_json_from_xml(xml)
       XmlSimple.xml_in(xml)
     end
 
     def handler(response)
       rexml = REXML::Document.new(response.body)
-      self.define_singleton_method(:all) { convert_json_from_xml(response.body) }
+      self.define_singleton_method(:all) { convert_xml_into_json(response.body) }
 
       # 通信がまともにできなかった場合はここがNGになる
       # status = rexml.elements["result/status/systemStatus"].text
@@ -27,7 +31,7 @@ module RmsItemApi
       # when :post
       #   post_response_parser(rexml)
       end
-      
+
       self
     end
 
@@ -102,6 +106,33 @@ module RmsItemApi
 
     def post_response_parser(rexml)
       self
+    end
+
+  end
+end
+
+class Hash
+  class << self
+
+    def from_xml(rexml)
+      xml_elem_to_hash rexml.root
+    end
+
+    private
+
+    def xml_elem_to_hash(el)
+      value = if el.has_elements?
+        children = {}
+        el.each_element do |e|
+          children.merge!(xml_elem_to_hash(e)) do |k,v1,v2|
+            v1.is_a?(Array) ?  v1 << v2 : [v1,v2]
+          end
+        end
+        children
+      else
+        el.text
+      end
+      { el.name.to_sym => value }
     end
 
   end
