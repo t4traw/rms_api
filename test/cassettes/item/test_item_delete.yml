@@ -1,0 +1,85 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.rms.rakuten.co.jp/es/1.0/item/delete
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <request>
+          <itemDeleteRequest>
+            <item>
+              <itemUrl>test1234</itemUrl>
+            </item>
+          </itemDeleteRequest>
+        </request>
+    headers:
+      User-Agent:
+      - Faraday v0.11.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 12 May 2017 08:06:47 GMT
+      Content-Type:
+      - text/xml; charset=utf-8
+      X-Powered-By:
+      - Servlet/2.5 JSP/2.1
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '220'
+      Connection:
+      - close
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <result><status><interfaceId>item.delete</interfaceId><systemStatus>OK</systemStatus><message>OK</message><requestId>f84eaf14-5cb4-4feb-9496-7997217cbdf2</requestId><requests/></status><itemDeleteResult><code>N000</code><item><itemUrl>test1234</itemUrl></item></itemDeleteResult></result>
+    http_version: 
+  recorded_at: Fri, 12 May 2017 08:06:47 GMT
+- request:
+    method: get
+    uri: https://api.rms.rakuten.co.jp/es/1.0/item/get?itemUrl=test1234
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.11.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 12 May 2017 08:06:47 GMT
+      Content-Type:
+      - text/xml; charset=utf-8
+      X-Powered-By:
+      - Servlet/2.5 JSP/2.1
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '226'
+      Connection:
+      - close
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <result><status><interfaceId>item.get</interfaceId><systemStatus>OK</systemStatus><message>OK</message><requestId>51d45daa-570b-4262-b368-13c576e86933</requestId><requests><itemUrl>test1234</itemUrl></requests></status><itemGetResult><code>C001</code><item><itemUrl>test1234</itemUrl></item></itemGetResult></result>
+    http_version: 
+  recorded_at: Fri, 12 May 2017 08:06:47 GMT
+recorded_with: VCR 3.0.3

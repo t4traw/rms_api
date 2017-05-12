@@ -98,4 +98,16 @@ class RmsItemApiTest < Minitest::Test
     end
   end
 
+  def test_item_delete
+    delete_data = {
+      itemUrl: "test1234",
+    }
+    VCR.use_cassette('item/test_item_delete') do
+      assert_equal true, client.delete(delete_data).is_success?
+      item = client.get(delete_data[:itemUrl])
+      assert_equal false, item.is_success?
+      assert_equal "該当する商品IDは存在しません。", item.message
+    end
+  end
+
 end
