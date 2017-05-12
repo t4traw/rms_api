@@ -13,31 +13,25 @@ module RmsItemApi
       XmlSimple.xml_in(xml)
     end
 
-    def handler(xml)
-      rexml = REXML::Document.new(xml)
-      self.define_singleton_method(:all) { convert_json_from_xml(xml) }
+    def handler(response)
+      rexml = REXML::Document.new(response.body)
+      self.define_singleton_method(:all) { convert_json_from_xml(response.body) }
 
-      # そのその通信がまともにできなかった場合はここがNGになる
-      status = rexml.elements["result/status/systemStatus"].text
+      # 通信がまともにできなかった場合はここがNGになる
+      # status = rexml.elements["result/status/systemStatus"].text
+
       status_parser(rexml)
+      case response.env.method
+      when :get
+        get_response_parser(rexml)
+      # when :post
+      #   post_response_parser(rexml)
+      end
+      
+      self
     end
 
     private
-
-    def status_parser(rexml)
-      interfaceId = rexml.elements["result/status/interfaceId"].text
-      api = interfaceId.split('.')[0]
-      method = interfaceId.split('.')[1]
-      response_code = rexml.elements["result/#{api}#{method.capitalize}Result/code"].text
-
-      yml = "#{File.dirname(__FILE__)}/../../config/error_codes.yml"
-      error_codes = YAML.load_file(yml)
-
-      self.define_singleton_method(:result) { error_codes[response_code] }
-      self.define_singleton_method(:is_success?) { response_code == 'N000' ? true : false }
-
-      self.is_success?
-    end
 
     def encoded_key
       if @serviceSecret.blank? && @licenseKey.blank?
@@ -48,61 +42,67 @@ module RmsItemApi
       end
     end
 
-    def parse_response(rexml)
-      method = rexml.elements['result/status/interfaceId'].text
-      result_code = parsed_xml.xpath("result/item#{method}Result/code").text
-      case method
-      when 'Get'
-        if result_code == 'N000'
-          puts "#{method} succeeded" unless @quiet_option
-          xpoint = 'result/itemGetResult/item'
-          parsed_xml.xpath(xpoint).each do |xml|
-            xml.children.each_with_index do |x, index|
-              not_have_children = true
+    def get_endpoint(rexml)
+      result = {}
+      interfaceId = rexml.elements["result/status/interfaceId"].text
+      result[:api] = interfaceId.split('.')[0]
+      result[:method] = interfaceId.split('.')[1]
+      result[:camel] = "#{result[:api]}#{result[:method].capitalize}"
+      result
+    end
 
-              x.children.each do |y|
-                y.children.each do |z|
-                  not_have_children = false
-                  begin
-                    self.define_singleton_method(z.name.underscore) {
-                      z.text.force_encoding('utf-8')
-                    }
-                  rescue => e
-                    puts e unless @quiet_option
-                  end
-                end
-              end
+    def status_parser(rexml)
+      endpoint = get_endpoint(rexml)
+      xpoint = "result/#{endpoint[:camel]}Result/code"
+      response_code = rexml.elements[xpoint].text
 
-              if not_have_children
-                self.define_singleton_method(x.name.underscore) {
-                  x.text.force_encoding('utf-8')
-                }
-              end
+      yml = "#{File.dirname(__FILE__)}/../../config/response_codes.yml"
+      response_codes = YAML.load_file(yml)
 
+      self.define_singleton_method(:is_success?) { response_code == 'N000' ? true : false }
+      self.define_singleton_method(:message) { response_codes[response_code] }
+
+      err_point = "result/#{endpoint[:camel]}Result/errorMessages/errorMessage/msg"
+      err_msg = []
+      rexml.elements.each(err_point) do |element|
+        err_msg << element.text
+      end
+      self.define_singleton_method(:errors) { err_msg }
+
+      self.is_success?
+    end
+
+    def get_response_parser(rexml)
+      endpoint = get_endpoint(rexml)
+      xpoint = "result/#{endpoint[:camel]}Result/item"
+      rexml.elements.each(xpoint) do |result|
+        result.children.each do |el|
+          next if el.to_s.strip.blank?
+          if el.has_elements?
+            begin
+              self.define_singleton_method(el.name.underscore) {
+                Hash.from_xml(el.to_s)
+              }
+            rescue => e
+              puts e
+            end
+          else
+            begin
+              self.define_singleton_method(el.name.underscore) {
+                el.text.try!(:force_encoding, 'utf-8')
+              }
+            rescue => e
+              puts e
             end
           end
-          return self
-        else
-          puts "指定された商品管理番号は存在しません" unless @quiet_option
         end
+      end
+      self
+    end
 
-      when 'Update', 'Insert', 'Delete'
-        if result_code == 'N000'
-          puts "#{method} succeeded" unless @quiet_option
-        else
-          config_file = "#{File.dirname(__FILE__)}/../config/field_name.yml"
-          field_name = Hashie::Mash.new(YAML.load_file(config_file))
-          xpoint = "result/item#{method}Result/errormessages"
-          parsed_xml.xpath(xpoint).each do |xml|
-            xml.children.each do |x|
-              error_field = x.xpath('fieldId').text
-              error_description = x.xpath('msg').text.force_encoding('utf-8')
-              puts "#{field_name[error_field]}:#{error_description}" unless @quiet_option
-            end
-          end
-        end
-      end # case
-    end # parse_response
+    def post_response_parser(rexml)
+      self
+    end
 
   end
 end

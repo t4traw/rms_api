@@ -31,7 +31,6 @@ module RmsItemApi
   end
 end
 
-
 module RmsItemApi
   class RmsItemApi < Client
     # RmsItemApi::RmsItemApi is deprecated.
