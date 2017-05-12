@@ -1,0 +1,38 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.rms.rakuten.co.jp/es/1.0/item/get?itemUrl=test1234
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.11.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 12 May 2017 03:13:00 GMT
+      Content-Type:
+      - text/xml; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '839'
+      Connection:
+      - close
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <result><status><interfaceId>item.get</interfaceId><systemStatus>OK</systemStatus><message>OK</message><requestId>6939fac5-7b53-47ec-bf6e-269557b09555</requestId><requests><itemUrl>test1234</itemUrl></requests></status><itemGetResult><code>N000</code><item><itemUrl>test1234</itemUrl><itemNumber>test1234</itemNumber><itemName>test_item</itemName><itemPrice>12345</itemPrice><genreId>101916</genreId><catalogId/><catalogIdExemptionReason>5</catalogIdExemptionReason><images/><descriptionForPC>Lorem ipsum</descriptionForPC><descriptionForMobile>Lorem ipsum</descriptionForMobile><descriptionForSmartPhone>Lorem ipsum</descriptionForSmartPhone><options/><tagIds/><catchCopyForPC/><catchCopyForMobile/><descriptionBySalesMethod>Lorem ipsum</descriptionBySalesMethod><isSaleButton>true</isSaleButton><isDocumentButton>false</isDocumentButton><isInquiryButton>true</isInquiryButton><isStockNoticeButton>false</isStockNoticeButton><itemLayout>1</itemLayout><isIncludedTax>true</isIncludedTax><isIncludedPostage>false</isIncludedPostage><isIncludedCashOnDeliveryPostage>false</isIncludedCashOnDeliveryPostage><orderLimit>-1</orderLimit><postage>-1</postage><isNoshiEnable>false</isNoshiEnable><isTimeSale>false</isTimeSale><isUnavailableForSearch>false</isUnavailableForSearch><isAvailableForMobile>true</isAvailableForMobile><isDepot>true</isDepot><detailSellType>0</detailSellType><point><pointRate/><pointRateStart/><pointRateEnd/></point><itemInventory><inventoryType>1</inventoryType><inventories><inventory><inventoryCount>0</inventoryCount><isBackorder>false</isBackorder><isRestoreInventoryFlag>false</isRestoreInventoryFlag></inventory></inventories><inventoryQuantityFlag>0</inventoryQuantityFlag></itemInventory><asurakuDeliveryId/><sizeChartLinkCode/><reviewDisp>2</reviewDisp><displayPriceId>0</displayPriceId><categories><categoryInfo><categoryId>1</categoryId><isPluralItemPage>false</isPluralItemPage></categoryInfo></categories><itemWeight>999999999</itemWeight><layoutCommonId>0</layoutCommonId><layoutMapId>0</layoutMapId><textSmallId>0</textSmallId><lossLeaderId>0</lossLeaderId><textLargeId>0</textLargeId></item></itemGetResult></result>
+    http_version: 
+  recorded_at: Fri, 12 May 2017 03:13:00 GMT
+recorded_with: VCR 3.0.3

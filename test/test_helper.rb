@@ -18,10 +18,9 @@ VCR.configure do |c|
   # c.filter_sensitive_data('<YOUR_APPLICATION_SECRET>') { ENV['YOUR_APPLICATION_SECRET'] }
   # c.filter_sensitive_data('<YOUR_REFRESH_TOKEN>') { ENV['YOUR_REFRESH_TOKEN'] }
   # c.filter_sensitive_data('<BASIC_AUTH>') { ENV['BASIC_AUTH'] }
-  # c.before_record do |i|
-  #   i.request.headers.delete('Authorization')
-  #   i.response.body.sub!(/\"access_token\":\".*\"}$/, '"access_token":"<ACCESS_TOKEN>"}')
-  # end
+  c.before_record do |i|
+    i.request.headers.delete('Authorization')
+  end
 end
 
 module TestHelper
