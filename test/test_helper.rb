@@ -26,7 +26,7 @@ end
 module TestHelper
   module Client
     def client
-      RmsItemApi::RmsItemApi.new(
+      RmsItemApi::Client.new(
         serviceSecret: ENV['YOUR_SERVICESECRET'],
         licenseKey: ENV['YOUR_LICENSEKEY']
       )
