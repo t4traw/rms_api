@@ -28,35 +28,35 @@ class RmsItemApiTest < Minitest::Test
 
   def test_item_insert
     insert_data = {
-      itemUrl: "test1234",
-      itemNumber: "test1234",
-      itemName: "test_item",
-      itemPrice: 12345,
-      genreId: 101916,
-      catalogIdExemptionReason: 5,
-      descriptionForPC: "Lorem ipsum",
-      descriptionForMobile: "Lorem ipsum",
-      descriptionForSmartPhone: "Lorem ipsum",
-      catchCopyForPC: "",
-      catchCopyForMobile: "",
-      descriptionBySalesMethod: "Lorem ipsum",
-      isSaleButton: true,
-      isDocumentButton: false,
-      isInquiryButton: true,
-      isStockNoticeButton: false,
-      itemLayout: 1,
-      isIncludedTax: true,
-      isIncludedPostage: false,
-      isIncludedCashOnDeliveryPostage: false,
-      isNoshiEnable: false,
-      isUnavailableForSearch: false,
-      isDepot: true,
-      detailSellType: 0,
+      item_url: "test1234",
+      item_number: "test1234",
+      item_name: "test_item",
+      item_price: 12345,
+      genre_id: 101916,
+      catalog_id_exemption_reason: 5,
+      description_for_pc: "Lorem ipsum",
+      description_for_mobile: "Lorem ipsum",
+      description_for_smart_phone: "Lorem ipsum",
+      catch_copy_for_pc: "",
+      catch_copy_for_mobile: "",
+      description_by_sales_method: "Lorem ipsum",
+      is_sale_button: true,
+      is_document_button: false,
+      is_inquiry_button: true,
+      is_stock_notice_button: false,
+      item_layout: 1,
+      is_included_tax: true,
+      is_included_postage: false,
+      is_included_cash_on_delivery_postage: false,
+      is_noshi_enable: false,
+      is_unavailable_for_search: false,
+      is_depot: true,
+      detail_sell_type: 0,
       item_inventory: {
         inventory_type: 1,
         inventories: {
           inventory: {
-            inventoryCount: 0
+            inventory_count: 0
           }
         }
       }
@@ -69,7 +69,7 @@ class RmsItemApiTest < Minitest::Test
 
   def test_item_insert_error
     insert_data = {
-      itemUrl: "test1234",
+      item_url: "test1234",
     }
     expect_errors = [
       "商品管理番号（商品URL）欄にすでに登録済みのものは指定できません。重複がありましたのでご確認ください。",
@@ -88,23 +88,23 @@ class RmsItemApiTest < Minitest::Test
 
   def test_item_update
     update_data = {
-      itemUrl: "test1234",
-      itemName: "changed_item",
+      item_url: "test1234",
+      item_name: "changed_item",
     }
     VCR.use_cassette('item/test_item_update') do
-      assert_equal 'test_item', client.get(update_data[:itemUrl]).item_name
+      assert_equal 'test_item', client.get(update_data[:item_url]).item_name
       assert_equal true, client.update(update_data).is_success?
-      assert_equal 'changed_item', client.get(update_data[:itemUrl]).item_name
+      assert_equal 'changed_item', client.get(update_data[:item_url]).item_name
     end
   end
 
   def test_item_delete
     delete_data = {
-      itemUrl: "test1234",
+      item_url: "test1234",
     }
     VCR.use_cassette('item/test_item_delete') do
       assert_equal true, client.delete(delete_data).is_success?
-      item = client.get(delete_data[:itemUrl])
+      item = client.get(delete_data[:item_url])
       assert_equal false, item.is_success?
       assert_equal "該当する商品IDは存在しません。", item.message
     end
