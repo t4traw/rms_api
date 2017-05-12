@@ -20,12 +20,6 @@ module RmsItemApi
     def initialize(serviceSecret:, licenseKey:)
       @serviceSecret = serviceSecret
       @licenseKey = licenseKey
-      @quiet_option = nil
-    end
-
-    def quiet!
-      @quiet_option = true
-      self
     end
 
   end
