@@ -21,10 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "faraday", '~> 0.11.0'
   spec.add_dependency "activesupport", '~> 5.0.2'
   spec.add_dependency "activemodel", '~> 5.0.2'
-  spec.add_dependency "oga", '~> 2.9'
-  spec.add_dependency "hashie", '~> 3.5.5'
   spec.add_dependency "builder"
-  spec.add_dependency "xml-simple", '~> 1.1.5'
 
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
