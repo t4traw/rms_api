@@ -2,6 +2,8 @@ require "rms_item_api/version"
 require 'rms_item_api/helper.rb'
 require 'rms_item_api/item.rb'
 
+require 'rexml/document'
+require 'xmlsimple'
 require 'yaml'
 require 'faraday'
 require 'active_support'

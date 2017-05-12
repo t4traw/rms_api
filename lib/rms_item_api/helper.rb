@@ -1,5 +1,6 @@
 module RmsItemApi
   module Helper
+
     ENDPOINT = 'https://api.rms.rakuten.co.jp/es/1.0/item/'.freeze
     def connection(method)
       Faraday.new(url: ENDPOINT + method) do |conn|
@@ -8,17 +9,35 @@ module RmsItemApi
       end
     end
 
-    def handler(result, method)
-      parsed_xml = Oga.parse_xml(result)
-      system_status = Oga.parse_xml(result).xpath("result/status/systemStatus").text
-      if system_status == 'NG'
-        raise Oga.parse_xml(result).xpath("result/status/message").text
-      else
-        parse_response(parsed_xml, method)
-      end
+    def convert_json_from_xml(xml)
+      XmlSimple.xml_in(xml)
+    end
+
+    def handler(xml)
+      rexml = REXML::Document.new(xml)
+      self.define_singleton_method(:all) { convert_json_from_xml(xml) }
+
+      # そのその通信がまともにできなかった場合はここがNGになる
+      status = rexml.elements["result/status/systemStatus"].text
+      status_parser(rexml)
     end
 
     private
+
+    def status_parser(rexml)
+      interfaceId = rexml.elements["result/status/interfaceId"].text
+      api = interfaceId.split('.')[0]
+      method = interfaceId.split('.')[1]
+      response_code = rexml.elements["result/#{api}#{method.capitalize}Result/code"].text
+
+      yml = "#{File.dirname(__FILE__)}/../../config/error_codes.yml"
+      error_codes = YAML.load_file(yml)
+
+      self.define_singleton_method(:result) { error_codes[response_code] }
+      self.define_singleton_method(:is_success?) { response_code == 'N000' ? true : false }
+
+      self.is_success?
+    end
 
     def encoded_key
       if @serviceSecret.blank? && @licenseKey.blank?
@@ -29,7 +48,8 @@ module RmsItemApi
       end
     end
 
-    def parse_response(parsed_xml, method)
+    def parse_response(rexml)
+      method = rexml.elements['result/status/interfaceId'].text
       result_code = parsed_xml.xpath("result/item#{method}Result/code").text
       case method
       when 'Get'
@@ -65,6 +85,7 @@ module RmsItemApi
         else
           puts "指定された商品管理番号は存在しません" unless @quiet_option
         end
+
       when 'Update', 'Insert', 'Delete'
         if result_code == 'N000'
           puts "#{method} succeeded" unless @quiet_option

@@ -3,8 +3,8 @@ module RmsItemApi
     include RmsItemApi::Helper
 
     def get(item_data)
-      result = connection('get').get {|r| r.params['itemUrl'] = item_data}
-      handler(result.body, "Get")
+      response = connection('get').get {|r| r.params['itemUrl'] = item_data}
+      handler response
     end
 
   end
