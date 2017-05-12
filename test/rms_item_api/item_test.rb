@@ -5,7 +5,7 @@ class RmsItemApiTest < Minitest::Test
   include TestHelper::Client
 
   def test_item_get
-    inventory_data = {
+    expect_inventory_data = {
       "itemInventory"=>{
         "inventoryType"=>"1",
         "inventories"=>{
@@ -22,7 +22,7 @@ class RmsItemApiTest < Minitest::Test
       item = client.get('test1234')
       assert_equal true, item.is_success?
       assert_equal 'test_item', item.item_name
-      assert_equal inventory_data, item.item_inventory
+      assert_equal expect_inventory_data, item.item_inventory
     end
   end
 
@@ -64,6 +64,25 @@ class RmsItemApiTest < Minitest::Test
     VCR.use_cassette('item/test_item_insert') do
       item = client.insert(insert_data)
       assert_equal true, item.is_success?
+    end
+  end
+
+  def test_item_insert_error
+    insert_data = {
+      :itemUrl=>"test1234",
+    }
+    expect_errors = [
+      "商品管理番号（商品URL）欄にすでに登録済みのものは指定できません。重複がありましたのでご確認ください。",
+      "商品名は必須項目です。必ず記入してください。",
+      "全商品ディレクトリID欄がありません。登録の場合は、必ず全商品ディレクトリIDをご指定ください。",
+      "販売価格欄がありません。登録の場合は、必ず販売価格をご指定ください。",
+      "在庫タイプ欄がありません。登録の場合は、必ず在庫タイプをご指定ください。"
+    ]
+    VCR.use_cassette('item/test_item_insert_error') do
+      item = client.insert(insert_data)
+      assert_equal false, item.is_success?
+      assert_equal expect_errors, item.errors
+      assert_equal "不要なデータが入っています。", item.message
     end
   end
 

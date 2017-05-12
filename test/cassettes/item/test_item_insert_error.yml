@@ -1,0 +1,74 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.rms.rakuten.co.jp/es/1.0/item/insert
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <request>
+          <itemInsertRequest>
+            <item>
+              <itemUrl>test1234</itemUrl>
+            </item>
+          </itemInsertRequest>
+        </request>
+    headers:
+      User-Agent:
+      - Faraday v0.11.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 12 May 2017 07:46:28 GMT
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '577'
+      Connection:
+      - close
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJlc3Vs
+        dD48c3RhdHVzPjxpbnRlcmZhY2VJZD5pdGVtLmluc2VydDwvaW50ZXJmYWNl
+        SWQ+PHN5c3RlbVN0YXR1cz5PSzwvc3lzdGVtU3RhdHVzPjxtZXNzYWdlPk9L
+        PC9tZXNzYWdlPjxyZXF1ZXN0SWQ+YjEzMmRkNTQtMWIwNy00NDM0LWJkZjQt
+        NjkzNDE3MmIwMGVhPC9yZXF1ZXN0SWQ+PHJlcXVlc3RzLz48L3N0YXR1cz48
+        aXRlbUluc2VydFJlc3VsdD48Y29kZT5DMjE5PC9jb2RlPjxlcnJvck1lc3Nh
+        Z2VzPjxlcnJvck1lc3NhZ2U+PGVycm9ySWQ+MzI0PC9lcnJvcklkPjxmaWVs
+        ZElkPjUwMTwvZmllbGRJZD48bXNnPuWVhuWTgeeuoeeQhueVquWPt++8iOWV
+        huWTgVVSTO+8ieashOOBq+OBmeOBp+OBq+eZu+mMsua4iOOBv+OBruOCguOB
+        ruOBr+aMh+WumuOBp+OBjeOBvuOBm+OCk+OAgumHjeikh+OBjOOBguOCiuOB
+        vuOBl+OBn+OBruOBp+OBlOeiuuiqjeOBj+OBoOOBleOBhOOAgjwvbXNnPjwv
+        ZXJyb3JNZXNzYWdlPjxlcnJvck1lc3NhZ2U+PGVycm9ySWQ+MzA5PC9lcnJv
+        cklkPjxmaWVsZElkPjUwMjwvZmllbGRJZD48bXNnPuWVhuWTgeWQjeOBr+W/
+        hemgiOmgheebruOBp+OBmeOAguW/heOBmuiomOWFpeOBl+OBpuOBj+OBoOOB
+        leOBhOOAgjwvbXNnPjwvZXJyb3JNZXNzYWdlPjxlcnJvck1lc3NhZ2U+PGVy
+        cm9ySWQ+MTIyPC9lcnJvcklkPjxmaWVsZElkPjUwNDwvZmllbGRJZD48bXNn
+        PuWFqOWVhuWTgeODh+OCo+ODrOOCr+ODiOODqklE5qyE44GM44GC44KK44G+
+        44Gb44KT44CC55m76Yyy44Gu5aC05ZCI44Gv44CB5b+F44Ga5YWo5ZWG5ZOB
+        44OH44Kj44Os44Kv44OI44OqSUTjgpLjgZTmjIflrprjgY/jgaDjgZXjgYTj
+        gII8L21zZz48L2Vycm9yTWVzc2FnZT48ZXJyb3JNZXNzYWdlPjxlcnJvcklk
+        PjEyMjwvZXJyb3JJZD48ZmllbGRJZD41MDM8L2ZpZWxkSWQ+PG1zZz7osqnl
+        o7LkvqHmoLzmrITjgYzjgYLjgorjgb7jgZvjgpPjgILnmbvpjLLjga7loLTl
+        kIjjga/jgIHlv4XjgZrosqnlo7LkvqHmoLzjgpLjgZTmjIflrprjgY/jgaDj
+        gZXjgYTjgII8L21zZz48L2Vycm9yTWVzc2FnZT48ZXJyb3JNZXNzYWdlPjxl
+        cnJvcklkPjEyMjwvZXJyb3JJZD48ZmllbGRJZD41MDk8L2ZpZWxkSWQ+PG1z
+        Zz7lnKjluqvjgr/jgqTjg5fmrITjgYzjgYLjgorjgb7jgZvjgpPjgILnmbvp
+        jLLjga7loLTlkIjjga/jgIHlv4XjgZrlnKjluqvjgr/jgqTjg5fjgpLjgZTm
+        jIflrprjgY/jgaDjgZXjgYTjgII8L21zZz48L2Vycm9yTWVzc2FnZT48L2Vy
+        cm9yTWVzc2FnZXM+PGl0ZW0+PGl0ZW1Vcmw+dGVzdDEyMzQ8L2l0ZW1Vcmw+
+        PC9pdGVtPjwvaXRlbUluc2VydFJlc3VsdD48L3Jlc3VsdD4=
+    http_version: 
+  recorded_at: Fri, 12 May 2017 07:46:29 GMT
+recorded_with: VCR 3.0.3
