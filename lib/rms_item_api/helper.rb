@@ -21,8 +21,9 @@ module RmsItemApi
       rexml = REXML::Document.new(response.body)
       self.define_singleton_method(:all) { convert_xml_into_json(response.body) }
 
-      # 通信がまともにできなかった場合はここがNGになる
-      # status = rexml.elements["result/status/systemStatus"].text
+      if rexml.elements["result/status/systemStatus"].text == "NG"
+        raise rexml.elements["result/status/message"].text
+      end
 
       status_parser(rexml)
       case response.env.method
