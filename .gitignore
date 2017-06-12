@@ -10,5 +10,4 @@
 
 .env
 .rbenv-gemsets
-sample.rb
-sample.xml
+sample*
