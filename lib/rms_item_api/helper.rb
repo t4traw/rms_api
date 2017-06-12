@@ -13,10 +13,6 @@ module RmsItemApi
       Hash.from_xml(xml)
     end
 
-    def convert_json_from_xml(xml)
-      XmlSimple.xml_in(xml)
-    end
-
     def handler(response)
       rexml = REXML::Document.new(response.body)
       self.define_singleton_method(:all) { convert_xml_into_json(response.body) }
