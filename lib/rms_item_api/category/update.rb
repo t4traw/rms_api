@@ -1,8 +1,8 @@
 module RmsItemApi
-  module Item
+  module Category
     include RmsItemApi::Helper
 
-    def item_update(item_data)
+    def category_update(item_data)
       request_xml = {itemUpdateRequest: {item: item_data}}.to_xml(
         root: 'request', camelize: :lower, skip_types: true
       )

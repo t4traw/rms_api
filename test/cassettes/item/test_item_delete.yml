@@ -43,7 +43,7 @@ http_interactions:
       string: |-
         <?xml version="1.0" encoding="UTF-8"?>
         <result><status><interfaceId>item.delete</interfaceId><systemStatus>OK</systemStatus><message>OK</message><requestId>f84eaf14-5cb4-4feb-9496-7997217cbdf2</requestId><requests/></status><itemDeleteResult><code>N000</code><item><itemUrl>test1234</itemUrl></item></itemDeleteResult></result>
-    http_version: 
+    http_version:
   recorded_at: Fri, 12 May 2017 08:06:47 GMT
 - request:
     method: get
@@ -80,6 +80,6 @@ http_interactions:
       string: |-
         <?xml version="1.0" encoding="UTF-8"?>
         <result><status><interfaceId>item.get</interfaceId><systemStatus>OK</systemStatus><message>OK</message><requestId>51d45daa-570b-4262-b368-13c576e86933</requestId><requests><itemUrl>test1234</itemUrl></requests></status><itemGetResult><code>C001</code><item><itemUrl>test1234</itemUrl></item></itemGetResult></result>
-    http_version: 
+    http_version:
   recorded_at: Fri, 12 May 2017 08:06:47 GMT
 recorded_with: VCR 3.0.3

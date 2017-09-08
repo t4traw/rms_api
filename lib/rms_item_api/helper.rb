@@ -1,9 +1,9 @@
 module RmsItemApi
   module Helper
 
-    ENDPOINT = 'https://api.rms.rakuten.co.jp/es/1.0/item/'.freeze
-    def connection(method)
-      Faraday.new(url: ENDPOINT + method) do |conn|
+    ENDPOINT = 'https://api.rms.rakuten.co.jp/es/'.freeze
+    def connection(url, method)
+      Faraday.new(url: ENDPOINT + url + method) do |conn|
         conn.adapter(Faraday.default_adapter)
         conn.headers['Authorization'] = encoded_key
       end
@@ -14,16 +14,20 @@ module RmsItemApi
     end
 
     def handler(response)
+      p "ハンドラーに」きたよ＾＾＾＾＾＾＾＾"
       rexml = REXML::Document.new(response.body)
       self.define_singleton_method(:all) { convert_xml_into_json(response.body) }
 
       if rexml.elements["result/status/systemStatus"].text == "NG"
+        p "エラーだよーーーーーーーー！"
         raise rexml.elements["result/status/message"].text
       end
-
+      p "あと少しだよ＾＾"
       status_parser(rexml)
+      p response.env.method
       case response.env.method
       when :get
+        p "getにきたよー＾ーーーー"
         get_response_parser(rexml)
       # when :post
       #   post_response_parser(rexml)
@@ -46,8 +50,11 @@ module RmsItemApi
     def get_endpoint(rexml)
       result = {}
       interfaceId = rexml.elements["result/status/interfaceId"].text
-      result[:api] = interfaceId.split('.')[0]
-      result[:method] = interfaceId.split('.')[1]
+      dot_count = interfaceId.count(".")
+      result[:api] = interfaceId.split('.')[dot_count-1]
+      p result[:api]
+      result[:method] = interfaceId.split('.')[dot_count]
+      p result[:method]
       result[:camel] = "#{result[:api]}#{result[:method].capitalize}"
       result
     end
@@ -55,6 +62,7 @@ module RmsItemApi
     def status_parser(rexml)
       endpoint = get_endpoint(rexml)
       xpoint = "result/#{endpoint[:camel]}Result/code"
+      p xpoint
       response_code = rexml.elements[xpoint].text
 
       yml = "#{File.dirname(__FILE__)}/../../config/response_codes.yml"
@@ -74,12 +82,18 @@ module RmsItemApi
     end
 
     def get_response_parser(rexml)
+      p "ndvsdncjsanlcnbaslcnlsaknclanclsaknclnsalncslaknclsnalcnsalkncslan"
       endpoint = get_endpoint(rexml)
-      xpoint = "result/#{endpoint[:camel]}Result/item"
+      p endpoint
+      xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}"
+      p xpoint
       rexml.elements.each(xpoint) do |result|
+        p result
         result.children.each do |el|
+          p el
           next if el.to_s.strip.blank?
           if el.has_elements?
+            p "エレメントを持っているよ"
             begin
               self.define_singleton_method(el.name.underscore) {
                 Hash.from_xml(el.to_s)

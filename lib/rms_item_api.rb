@@ -1,6 +1,8 @@
 require "rms_item_api/version"
 require 'rms_item_api/helper.rb'
 require 'rms_item_api/item.rb'
+require 'rms_item_api/category.rb'
+require 'rms_item_api/navigation.rb'
 
 require 'rexml/document'
 require 'yaml'
@@ -13,6 +15,8 @@ module RmsItemApi
   class Client
     include RmsItemApi::Helper
     include RmsItemApi::Item
+    include RmsItemApi::Category
+    include RmsItemApi::Navigation
 
     def initialize(serviceSecret:, licenseKey:)
       @serviceSecret = serviceSecret
