@@ -9,7 +9,6 @@ module RmsItemApi
       p "リクエストーーーーーーーーーーーーーーーーーーー"
       p "request_xml = #{request_xml}"
       response = connection('1.0/item/', 'insert').post {|r| r.body = request_xml}
-      p "responseだよーーーーーーーーーーーーー"
       handler response
     end
 

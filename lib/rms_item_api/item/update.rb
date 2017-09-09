@@ -6,7 +6,9 @@ module RmsItemApi
       request_xml = {itemUpdateRequest: {item: item_data}}.to_xml(
         root: 'request', camelize: :lower, skip_types: true
       )
-      response = connection('update').post {|r| r.body = request_xml}
+      response = connection('1.0/item/', 'update').post {|r| r.body = request_xml}
+      p "レスポンス吐き出すよーーーーーーーーーーーーーーーーーーー"
+      p response
       handler response
     end
 
