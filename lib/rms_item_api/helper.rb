@@ -14,20 +14,20 @@ module RmsItemApi
     end
 
     def handler(response)
-      p "ハンドラーに」きたよ＾＾＾＾＾＾＾＾"
+      p "ハンドラーにきたよーーーーーーーーーー"
       rexml = REXML::Document.new(response.body)
       self.define_singleton_method(:all) { convert_xml_into_json(response.body) }
 
       if rexml.elements["result/status/systemStatus"].text == "NG"
-        p "エラーだよーーーーーーーー！"
+        p "エラーだよーーーーーーーー"
         raise rexml.elements["result/status/message"].text
       end
-      p "あと少しだよ＾＾"
+      p "あと少しだよーーーーーーーーーーーーー"
       status_parser(rexml)
       p response.env.method
       case response.env.method
       when :get
-        p "getにきたよー＾ーーーー"
+        p "getにきたよーーーーーーーーーーーーーー"
         get_response_parser(rexml)
       # when :post
       #   post_response_parser(rexml)
@@ -61,8 +61,20 @@ module RmsItemApi
 
     def status_parser(rexml)
       endpoint = get_endpoint(rexml)
-      xpoint = "result/#{endpoint[:camel]}Result/code"
+      p "status_status_parserにきたよーーーーーーーー"
+      p endpoint[:camel]
+      if endpoint[:api] == "item"
+        p "endpoint[:api] == itemだよ"
+        xpoint = "result/#{endpoint[:camel]}Result/code" # origin
+      elsif endpoint[:api] == "category"
+        p "endpoint[:api] == categoryだよ"
+        xpoint = "result/#{endpoint[:camel]}Result/code" # origin
+      elsif endpoint[:api] == "genre"
+        p "endpoint[:api] == genreだよ"
+        xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/genre" # 無理やり
+      end
       p xpoint
+      p "xpointが見れてるよーーーーーーーーーーーー！"
       response_code = rexml.elements[xpoint].text
 
       yml = "#{File.dirname(__FILE__)}/../../config/response_codes.yml"
@@ -82,11 +94,18 @@ module RmsItemApi
     end
 
     def get_response_parser(rexml)
-      p "ndvsdncjsanlcnbaslcnlsaknclanclsaknclnsalncslaknclsnalcnsalkncslan"
+      p "get_response_parserにきたよーーーーー"
       endpoint = get_endpoint(rexml)
-      p endpoint
-      xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}"
-      p xpoint
+      if endpoint[:api] == "item"
+        p "endpoint[:api] == itemだよ"
+        xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
+      elsif endpoint[:api] == "category"
+        p "endpoint[:api] == categoryだよ"
+        xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
+      elsif endpoint[:api] == "genre"
+        p "endpoint[:api] == genreだよ"
+        xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}" # genre無理やり
+      end
       rexml.elements.each(xpoint) do |result|
         p result
         result.children.each do |el|
