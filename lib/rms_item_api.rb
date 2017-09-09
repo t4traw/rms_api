@@ -14,9 +14,13 @@ require 'active_model'
 module RmsItemApi
   class Client
     include RmsItemApi::Helper
-    include RmsItemApi::Item
+    include RmsItemApi::Cabinet
     include RmsItemApi::Category
+    include RmsItemApi::Coupon
+    include RmsItemApi::Item
     include RmsItemApi::Navigation
+    include RmsItemApi::Product
+    include RmsItemApi::ShopManagement
 
     def initialize(serviceSecret:, licenseKey:)
       @serviceSecret = serviceSecret
