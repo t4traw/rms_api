@@ -3,6 +3,7 @@ module RmsItemApi
 
     ENDPOINT = 'https://api.rms.rakuten.co.jp/es/'.freeze
     def connection(url, method)
+      p "connectionにきましたーーーーー"
       Faraday.new(url: ENDPOINT + url + method) do |conn|
         conn.adapter(Faraday.default_adapter)
         conn.headers['Authorization'] = encoded_key
@@ -10,21 +11,20 @@ module RmsItemApi
     end
 
     def convert_xml_into_json(xml)
+      p "convert_xml_into_jsonにきましたーーーーーーーー"
       Hash.from_xml(xml)
     end
 
     def handler(response)
       p "ハンドラーにきたよーーーーーーーーーー"
       rexml = REXML::Document.new(response.body)
+      p "rexmlは#{rexml}だよーーーーーーーー"
       self.define_singleton_method(:all) { convert_xml_into_json(response.body) }
-
       if rexml.elements["result/status/systemStatus"].text == "NG"
         p "エラーだよーーーーーーーー"
         raise rexml.elements["result/status/message"].text
       end
-      p "あと少しだよーーーーーーーーーーーーー"
       status_parser(rexml)
-      p response.env.method
       case response.env.method
       when :get
         p "getにきたよーーーーーーーーーーーーーー"
@@ -39,6 +39,7 @@ module RmsItemApi
     private
 
     def encoded_key
+      p "encoded_keyにきたよーーーーーーーーーーー"
       if @serviceSecret.blank? && @licenseKey.blank?
         error_msg = "serviceSecret and licenseKey are required"
         raise StandardError, error_msg
@@ -48,6 +49,7 @@ module RmsItemApi
     end
 
     def get_endpoint(rexml)
+      p "get_endpointにきたよーーーーーーーーーーー"
       result = {}
       interfaceId = rexml.elements["result/status/interfaceId"].text
       dot_count = interfaceId.count(".")
@@ -60,9 +62,8 @@ module RmsItemApi
     end
 
     def status_parser(rexml)
+      p "status_parserにきたよーーーーーーーーーーー"
       endpoint = get_endpoint(rexml)
-      p "status_status_parserにきたよーーーーーーーー"
-      p endpoint[:camel]
       if endpoint[:api] == "item"
         p "endpoint[:api] == itemだよ"
         xpoint = "result/#{endpoint[:camel]}Result/code" # origin
@@ -82,15 +83,15 @@ module RmsItemApi
 
       self.define_singleton_method(:is_success?) { response_code == 'N000' ? true : false }
       self.define_singleton_method(:message) { response_codes[response_code] }
-
       err_point = "result/#{endpoint[:camel]}Result/errorMessages/errorMessage/msg"
       err_msg = []
       rexml.elements.each(err_point) do |element|
         err_msg << element.text
       end
       self.define_singleton_method(:errors) { err_msg }
-
+      p "is_success?を通過するよーー？？？？？？？？？？？"
       self.is_success?
+      p "is_success?を通過しましたーーーーーーーーーーーー"
     end
 
     def get_response_parser(rexml)
@@ -135,6 +136,7 @@ module RmsItemApi
     end
 
     def post_response_parser(rexml)
+      p "post_response_parserにきましたーーーーーーー"
       self
     end
 
@@ -145,12 +147,14 @@ class Hash
   class << self
 
     def from_xml(rexml)
+      p "from_xmlにきましたーーーーーーー"
       xml_elem_to_hash rexml.root
     end
 
     private
 
     def xml_elem_to_hash(el)
+      p "xml_elem_to_hashにきましたーーーーーーー"
       value = if el.has_elements?
         children = {}
         el.each_element do |e|
