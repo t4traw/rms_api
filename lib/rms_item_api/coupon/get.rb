@@ -2,8 +2,8 @@ module RmsItemApi
   module Coupon
     include RmsItemApi::Helper
 
-    def item_get(item_data)
-      response = connection('1.0/item/', 'get').get {|r| r.params['itemUrl'] = item_data}
+    def coupon_get(coupon_code)
+      response = connection('1.0/coupon/', 'get').get {|r| r.params['couponCode'] = coupon_code}
       handler response
     end
 

@@ -17,6 +17,7 @@ module RmsItemApi
 
     def handler(response)
       p "ハンドラーにきたよーーーーーーーーーー"
+      p response
       rexml = REXML::Document.new(response.body)
       p "rexmlは#{rexml}だよーーーーーーーー"
       self.define_singleton_method(:all) { convert_xml_into_json(response.body) }
@@ -41,9 +42,11 @@ module RmsItemApi
     def encoded_key
       p "encoded_keyにきたよーーーーーーーーーーー"
       if @serviceSecret.blank? && @licenseKey.blank?
+        p "エラーだよーーーーーーーーーーー"
         error_msg = "serviceSecret and licenseKey are required"
         raise StandardError, error_msg
       else
+        p "通ってるよーーーーーーー"
         "ESA " + Base64.strict_encode64(@serviceSecret + ":" + @licenseKey)
       end
     end
@@ -54,9 +57,7 @@ module RmsItemApi
       interfaceId = rexml.elements["result/status/interfaceId"].text
       dot_count = interfaceId.count(".")
       result[:api] = interfaceId.split('.')[dot_count-1]
-      p result[:api]
       result[:method] = interfaceId.split('.')[dot_count]
-      p result[:method]
       result[:camel] = "#{result[:api]}#{result[:method].capitalize}"
       result
     end
@@ -65,17 +66,15 @@ module RmsItemApi
       p "status_parserにきたよーーーーーーーーーーー"
       endpoint = get_endpoint(rexml)
       if endpoint[:api] == "item"
-        p "endpoint[:api] == itemだよ"
         xpoint = "result/#{endpoint[:camel]}Result/code" # origin
       elsif endpoint[:api] == "category"
-        p "endpoint[:api] == categoryだよ"
         xpoint = "result/#{endpoint[:camel]}Result/code" # origin
       elsif endpoint[:api] == "genre"
-        p "endpoint[:api] == genreだよ"
-        xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/genre" # 無理やり
+        xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/genre"
       elsif endpoint[:api] == "cabinet"
-        p "endpoint[:api] == cabinetだよ"
-        xpoint = "result/#{endpoint[:api]}UsageGetResult/genre" # 無理やり
+        xpoint = "result/#{endpoint[:api]}UsageGetResult/genre"
+      elsif endpoint[:api] == "coupon"
+        xpoint = "result/#{endpoint[:api]}"
       end
       p xpoint
       p "xpointが見れてるよーーーーーーーーーーーー！"
@@ -101,17 +100,16 @@ module RmsItemApi
       p "get_response_parserにきたよーーーーー"
       endpoint = get_endpoint(rexml)
       if endpoint[:api] == "item"
-        p "endpoint[:api] == itemだよ"
         xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
       elsif endpoint[:api] == "category"
-        p "endpoint[:api] == categoryだよ"
         xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
       elsif endpoint[:api] == "genre"
-        p "endpoint[:api] == genreだよ"
         xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}" # genre無理やり
-      elsif endpoint[:api] == "cabinet"
-        p "endpoint[:api] == cabinetだよ"
-        xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}" # genre無理やり
+      # elsif endpoint[:api] == "cabinet"
+      #   p "endpoint[:api] == cabinetだよ"
+      #   xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}"
+      elsif endpoint[:api] == "coupon"
+        xpoint = "result/#{endpoint[:api]}"
       end
       rexml.elements.each(xpoint) do |result|
         p result
@@ -138,6 +136,7 @@ module RmsItemApi
           end
         end
       end
+      p "rexml.elementsを抜けそうだよーーー"
       self
     end
 
