@@ -54,50 +54,54 @@ module RmsItemApi
     end
 
     def get_endpoint(rexml)
-      p "get_endpointにきたよーーーーーーーーーーー"
+      p "get_endpointはじまりーーーーーーーーーーーーーーー"
       result = {}
       interfaceId = rexml.elements["result/status/interfaceId"].text
       dot_count = interfaceId.count(".")
       result[:api] = interfaceId.split('.')[dot_count-1]
       result[:method] = interfaceId.split('.')[dot_count]
       result[:camel] = "#{result[:api]}#{result[:method].capitalize}"
+      p "get_endpointおわりーーーーーーーーーーーーーーーー"
       result
     end
 
     def status_parser(rexml)
-      p "status_parserにきたよーーーーーーーーーーー"
-      endpoint = get_endpoint(rexml)
-      p "status_parserにきたよーーーーーーーーーーー"
-      if endpoint[:api] == "item"
-        xpoint = "result/#{endpoint[:camel]}Result/code" # origin
-      elsif endpoint[:api] == "category"
-        xpoint = "result/#{endpoint[:camel]}Result/code" # origin
-      elsif endpoint[:api] == "genre"
-        xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/genre"
-      elsif endpoint[:api] == "cabinet"
-        p "cabinet---------"
-        xpoint = "result/#{endpoint[:api]}FoldersGetResult"
-      elsif endpoint[:api] == "coupon"
-        xpoint = "result/#{endpoint[:api]}"
-      end
-      p xpoint
-      p "xpointが見れてるよーーーーーーーーーーーー！"
-      response_code = rexml.elements[xpoint].text
-
-      yml = "#{File.dirname(__FILE__)}/../../config/response_codes.yml"
-      response_codes = YAML.load_file(yml)
-
-      self.define_singleton_method(:is_success?) { response_code == 'N000' ? true : false }
-      self.define_singleton_method(:message) { response_codes[response_code] }
-      err_point = "result/#{endpoint[:camel]}Result/errorMessages/errorMessage/msg"
-      err_msg = []
-      rexml.elements.each(err_point) do |element|
-        err_msg << element.text
-      end
-      self.define_singleton_method(:errors) { err_msg }
-      p "is_success?を通過するよーー？？？？？？？？？？？"
-      self.is_success?
-      p "is_success?を通過しましたーーーーーーーーーーーー"
+      # p "status_parserにきたよーーーーーーーーーーー"
+      # endpoint = get_endpoint(rexml)
+      # if endpoint[:api] == "item"
+      #   xpoint = "result/#{endpoint[:camel]}Result/code" # origin
+      # elsif endpoint[:api] == "category"
+      #   xpoint = "result/#{endpoint[:camel]}Result/code" # origin
+      # elsif endpoint[:api] == "genre"
+      #   xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/genre"
+      # elsif endpoint[:api] == "cabinet"
+      #   p "cabinet---------"
+      #   xpoint = "result/#{endpoint[:api]}FoldersGetResult"
+      # elsif endpoint[:api] == "coupon"
+      #   xpoint = "result/#{endpoint[:api]}"
+      # elsif endpoint[:api] == "shop_management"
+      #   p "shop_managementにきたよーーーーーー"
+      #   xpoint = "result/delvAreaMasterList"
+      # end
+      # p xpoint
+      # p "xpointが見れてるよーーーーーーーーーーーー！"
+      # response_code = rexml.elements[xpoint].text
+      #
+      # yml = "#{File.dirname(__FILE__)}/../../config/response_codes.yml"
+      # response_codes = YAML.load_file(yml)
+      #
+      # self.define_singleton_method(:is_success?) { response_code == 'N000' ? true : false }
+      # self.define_singleton_method(:message) { response_codes[response_code] }
+      # err_point = "result/#{endpoint[:camel]}Result/errorMessages/errorMessage/msg"
+      # err_msg = []
+      # rexml.elements.each(err_point) do |element|
+      #   err_msg << element.text
+      # end
+      # self.define_singleton_method(:errors) { err_msg }
+      # p "err_msg=#{err_msg}"
+      # p "is_success?を通過するよーー？？？？？？？？？？？"
+      # self.is_success?
+      # p "is_success?を通過しましたーーーーーーーーーーーー"
     end
 
     def get_response_parser(rexml)
@@ -116,6 +120,10 @@ module RmsItemApi
         xpoint = "result/cabinetFoldersGetResult"
       elsif endpoint[:api] == "coupon"
         xpoint = "result/#{endpoint[:api]}"
+      elsif endpoint[:api] == "asuraku"
+        p "shop_managementにきたよーーー２２２２２２"
+        xpoint = "result/delvAreaMasterList/delvdateMaster"
+        p "xpoint=#{xpoint}"
       end
       rexml.elements.each(xpoint) do |result|
         p result
