@@ -14,7 +14,10 @@ module RmsItemApi
 
     def cabinet_folders_get(offset, limit)
       p "cabinet_folders_get動いてるヨーーーーーーーー"
-      response = connection('1.0/cabinet/folders/', 'get').get {|r| r.params['offset', 'limit'] = offset, limit}
+      response = connection('1.0/cabinet/folders/', 'get').get { |r|
+        r.params['offset'] = offset
+        r.params['limit'] = limit
+      }
       handler response
     end
 

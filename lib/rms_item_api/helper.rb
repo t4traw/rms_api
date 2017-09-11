@@ -3,20 +3,22 @@ module RmsItemApi
 
     ENDPOINT = 'https://api.rms.rakuten.co.jp/es/'.freeze
     def connection(url, method)
-      p "connectionにきましたーーーーー"
+      p "connectionはじまりーーーーーーーーー"
       Faraday.new(url: ENDPOINT + url + method) do |conn|
         conn.adapter(Faraday.default_adapter)
         conn.headers['Authorization'] = encoded_key
+        p "connectionおわりーーーーーーーーー"
       end
     end
 
     def convert_xml_into_json(xml)
-      p "convert_xml_into_jsonにきましたーーーーーーーー"
+      p "convert_xml_into_jsonはじまりーーーーーーーー"
       Hash.from_xml(xml)
+      p "convert_xml_into_jsonおわりーーーーーーーー"
     end
 
     def handler(response)
-      p "ハンドラーにきたよーーーーーーーーーー"
+      p "ハンドラーはじまりーーーーーーーーーーーーー"
       p response
       rexml = REXML::Document.new(response.body)
       p "rexmlは#{rexml}だよーーーーーーーー"
@@ -33,20 +35,20 @@ module RmsItemApi
       # when :post
       #   post_response_parser(rexml)
       end
-
+      p "ハンドラーおわりーーーーーーーーーーーーー"
       self
     end
 
     private
 
     def encoded_key
-      p "encoded_keyにきたよーーーーーーーーーーー"
+      p "encoded_keyはじまりーーーーーーーーーーーーー"
       if @serviceSecret.blank? && @licenseKey.blank?
         p "エラーだよーーーーーーーーーーー"
         error_msg = "serviceSecret and licenseKey are required"
         raise StandardError, error_msg
       else
-        p "通ってるよーーーーーーー"
+        p "encoded_key通ってるよーーーーーーー"
         "ESA " + Base64.strict_encode64(@serviceSecret + ":" + @licenseKey)
       end
     end
@@ -65,6 +67,7 @@ module RmsItemApi
     def status_parser(rexml)
       p "status_parserにきたよーーーーーーーーーーー"
       endpoint = get_endpoint(rexml)
+      p "status_parserにきたよーーーーーーーーーーー"
       if endpoint[:api] == "item"
         xpoint = "result/#{endpoint[:camel]}Result/code" # origin
       elsif endpoint[:api] == "category"
@@ -72,7 +75,8 @@ module RmsItemApi
       elsif endpoint[:api] == "genre"
         xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/genre"
       elsif endpoint[:api] == "cabinet"
-        xpoint = "result/#{endpoint[:api]}UsageGetResult/genre"
+        p "cabinet---------"
+        xpoint = "result/#{endpoint[:api]}FoldersGetResult"
       elsif endpoint[:api] == "coupon"
         xpoint = "result/#{endpoint[:api]}"
       end
@@ -99,15 +103,17 @@ module RmsItemApi
     def get_response_parser(rexml)
       p "get_response_parserにきたよーーーーー"
       endpoint = get_endpoint(rexml)
+      p "endpoint[:api]= #{endpoint[:api]}"
       if endpoint[:api] == "item"
         xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
       elsif endpoint[:api] == "category"
         xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
       elsif endpoint[:api] == "genre"
         xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}" # genre無理やり
-      # elsif endpoint[:api] == "cabinet"
-      #   p "endpoint[:api] == cabinetだよ"
-      #   xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}"
+      elsif endpoint[:api] == "folders"
+        p "endpoint[:api] == cabinetだよ"
+        p endpoint[:api].capitalize
+        xpoint = "result/cabinetFoldersGetResult"
       elsif endpoint[:api] == "coupon"
         xpoint = "result/#{endpoint[:api]}"
       end
@@ -136,7 +142,7 @@ module RmsItemApi
           end
         end
       end
-      p "rexml.elementsを抜けそうだよーーー"
+      p "get_response_parserおわりーーーーーーー"
       self
     end
 
