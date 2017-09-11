@@ -73,6 +73,9 @@ module RmsItemApi
       elsif endpoint[:api] == "genre"
         p "endpoint[:api] == genreだよ"
         xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/genre" # 無理やり
+      elsif endpoint[:api] == "cabinet"
+        p "endpoint[:api] == cabinetだよ"
+        xpoint = "result/#{endpoint[:api]}UsageGetResult/genre" # 無理やり
       end
       p xpoint
       p "xpointが見れてるよーーーーーーーーーーーー！"
@@ -105,6 +108,9 @@ module RmsItemApi
         xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
       elsif endpoint[:api] == "genre"
         p "endpoint[:api] == genreだよ"
+        xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}" # genre無理やり
+      elsif endpoint[:api] == "cabinet"
+        p "endpoint[:api] == cabinetだよ"
         xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}" # genre無理やり
       end
       rexml.elements.each(xpoint) do |result|

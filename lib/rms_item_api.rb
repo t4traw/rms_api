@@ -1,8 +1,12 @@
 require "rms_item_api/version"
 require 'rms_item_api/helper.rb'
-require 'rms_item_api/item.rb'
+require 'rms_item_api/cabinet.rb'
 require 'rms_item_api/category.rb'
+require 'rms_item_api/coupon.rb'
+require 'rms_item_api/item.rb'
 require 'rms_item_api/navigation.rb'
+require 'rms_item_api/product.rb'
+require 'rms_item_api/shop_management.rb'
 
 require 'rexml/document'
 require 'yaml'
