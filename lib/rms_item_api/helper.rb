@@ -21,7 +21,6 @@ module RmsItemApi
       p "ハンドラーはじまりーーーーーーーーーーーーー"
       p response
       rexml = REXML::Document.new(response.body)
-      p "rexmlは#{rexml}だよーーーーーーーー"
       self.define_singleton_method(:all) { convert_xml_into_json(response.body) }
       if rexml.elements["result/status/systemStatus"].text == "NG"
         p "エラーだよーーーーーーーー"
@@ -31,6 +30,7 @@ module RmsItemApi
       case response.env.method
       when :get
         p "getにきたよーーーーーーーーーーーーーー"
+        p "rexml=#{rexml}"
         get_response_parser(rexml)
       # when :post
       #   post_response_parser(rexml)
@@ -107,33 +107,35 @@ module RmsItemApi
     def get_response_parser(rexml)
       p "get_response_parserにきたよーーーーー"
       endpoint = get_endpoint(rexml)
-      p "endpoint[:api]= #{endpoint[:api]}"
+      p "endpoint=#{endpoint}だよーーーーーー"
       if endpoint[:api] == "item"
-        xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
+        p "get_response_parserのitemはいったよーーーー"
+        p endpoint[:camel]
+        xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # original code
       elsif endpoint[:api] == "category"
-        xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # origin
+        xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}"
       elsif endpoint[:api] == "genre"
         xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}" # genre無理やり
-      elsif endpoint[:api] == "folders"
-        p "endpoint[:api] == cabinetだよ"
+      elsif endpoint[:api] == "folders" || "files"
+        p "endpoint[:api] == cabinetにきてるよーーーーーーー"
         p endpoint[:api].capitalize
-        xpoint = "result/cabinetFoldersGetResult"
+        xpoint = "result/cabinetUsageGetResult"
+        # xpoint = "result/cabinetFoldersGetResult"
+        # xpoint = "result/cabinetTrashboxFilesGetResult/files/file"
       elsif endpoint[:api] == "coupon"
         xpoint = "result/#{endpoint[:api]}"
       elsif endpoint[:api] == "asuraku"
         p "shop_managementにきたよーーー２２２２２２"
         xpoint = "result/delvAreaMasterList/delvdateMaster"
-        p "xpoint=#{xpoint}"
       end
+      p "xpoint = #{xpoint}"
       rexml.elements.each(xpoint) do |result|
-        p result
         result.children.each do |el|
-          p el
+          p "el=#{el}"
           next if el.to_s.strip.blank?
           if el.has_elements?
-            p "エレメントを持っているよ"
             begin
-              self.define_singleton_method(el.name.underscore) {
+              elif = self.define_singleton_method(el.name.underscore) {
                 Hash.from_xml(el.to_s)
               }
             rescue => e
@@ -141,7 +143,7 @@ module RmsItemApi
             end
           else
             begin
-              self.define_singleton_method(el.name.underscore) {
+              elelse = self.define_singleton_method(el.name.underscore) {
                 el.text.try!(:force_encoding, 'utf-8')
               }
             rescue => e
