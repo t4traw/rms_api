@@ -4,10 +4,6 @@ module RmsItemApi
 
     def cabinet_usage_get
       p "cabinet_usage_get動いてるヨーーーーーーーー"
-      # request_xml = {itemDeleteRequest: {item: item_data}}.to_xml(
-      #   root: 'request', camelize: :lower, skip_types: true
-      # )
-      # p "request_xml = #{request_xml}"
       response = connection('1.0/cabinet/usage/', 'get').get
       handler response
     end

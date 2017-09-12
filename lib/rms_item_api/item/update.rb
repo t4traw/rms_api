@@ -7,8 +7,11 @@ module RmsItemApi
         root: 'request', camelize: :lower, skip_types: true
       )
       response = connection('1.0/item/', 'update').post {|r| r.body = request_xml}
-      p "レスポンス吐き出すよーーーーーーーーーーーーーーーーーーー"
-      p response
+      handler response
+    end
+
+    def items_update
+      response = connection('1.0/items/', 'update').post
       handler response
     end
 

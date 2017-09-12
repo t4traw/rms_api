@@ -109,19 +109,16 @@ module RmsItemApi
       endpoint = get_endpoint(rexml)
       p "endpoint=#{endpoint}だよーーーーーー"
       if endpoint[:api] == "item"
-        p "get_response_parserのitemはいったよーーーー"
-        p endpoint[:camel]
+        p "itemはいったよーーーー"
         xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}" # original code
       elsif endpoint[:api] == "category"
         xpoint = "result/#{endpoint[:camel]}Result/#{endpoint[:api]}"
       elsif endpoint[:api] == "genre"
         xpoint = "result/navigation#{endpoint[:api].capitalize}GetResult/#{endpoint[:api]}" # genre無理やり
       elsif endpoint[:api] == "folders" || "files"
-        p "endpoint[:api] == cabinetにきてるよーーーーーーー"
-        p endpoint[:api].capitalize
-        xpoint = "result/cabinetUsageGetResult"
-        # xpoint = "result/cabinetFoldersGetResult"
-        # xpoint = "result/cabinetTrashboxFilesGetResult/files/file"
+        p "cabinetにきてるよーーー"
+        # xpoint = "result/cabinetUsageGetResult"
+        xpoint = "result/cabinet#{endpoint[:api].capitalize}GetResult"
       elsif endpoint[:api] == "coupon"
         xpoint = "result/#{endpoint[:api]}"
       elsif endpoint[:api] == "asuraku"
@@ -130,14 +127,18 @@ module RmsItemApi
       end
       p "xpoint = #{xpoint}"
       rexml.elements.each(xpoint) do |result|
+        # p "ああああああああ"
+        # p "result = #{result}"
         result.children.each do |el|
-          p "el=#{el}"
+          # p "いいいいいい"
+          # p "el = #{el}"
           next if el.to_s.strip.blank?
           if el.has_elements?
             begin
               elif = self.define_singleton_method(el.name.underscore) {
                 Hash.from_xml(el.to_s)
               }
+              p result
             rescue => e
               puts e
             end
