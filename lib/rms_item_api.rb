@@ -26,7 +26,7 @@ module RmsItemApi
     include RmsItemApi::Product
     include RmsItemApi::ShopManagement
 
-    def initialize(serviceSecret:, licenseKey:)
+    def initialize(serviceSecret, licenseKey)
       @serviceSecret = serviceSecret
       @licenseKey = licenseKey
     end
