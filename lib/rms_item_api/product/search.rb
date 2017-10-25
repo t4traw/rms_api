@@ -1,8 +1,8 @@
 module RmsItemApi
-  module Item
+  module Product
     include RmsItemApi::Helper
 
-    def item_get(item_data)
+    def product_get(item_data)
       response = connection('1.0/item/', 'get').get {|r| r.params['itemUrl'] = item_data}
       handler response
     end

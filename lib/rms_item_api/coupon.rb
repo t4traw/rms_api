@@ -1,0 +1,5 @@
+require 'rms_item_api/coupon/delete'
+require 'rms_item_api/coupon/get'
+require 'rms_item_api/coupon/issue'
+require 'rms_item_api/coupon/search'
+require 'rms_item_api/coupon/update'
