@@ -3,12 +3,11 @@ module RmsItemApi
     include RmsItemApi::Helper
 
     def delete(item_data)
-      request_xml = {itemDeleteRequest: {item: item_data}}.to_xml(
+      request_xml = { itemDeleteRequest: { item: item_data } }.to_xml(
         root: 'request', camelize: :lower, skip_types: true
       )
-      response = connection('delete').post {|r| r.body = request_xml}
+      response = connection('delete').post { |r| r.body = request_xml }
       handler response
     end
-
   end
 end

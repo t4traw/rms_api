@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/t4traw/rms_item_api.svg?branch=master)](https://travis-ci.org/t4traw/rms_item_api)
 [![Code Climate](https://codeclimate.com/github/t4traw/rms_item_api/badges/gpa.svg)](https://codeclimate.com/github/t4traw/rms_item_api)
 
-楽天市場に出店している店舗が使えるRMSの商品APIを叩くためのrubyラッパーです。シンプルなCRUD(作成、取得、更新、削除)のみを実装してあります。検索と複数更新は必要があれば追加したいと思います。
+楽天市場に出店している店舗が使える RMS の商品 API を叩くための ruby ラッパーです。シンプルな CRUD(作成、取得、更新、削除)のみを実装してあります。検索と複数更新は必要があれば追加したいと思います。
 
 ## Installation
 
@@ -12,13 +12,14 @@ Add this line to your application's Gemfile:
 ```ruby
 gem 'rms_item_api'
 ```
+
 ## Usage
 
-取得や更新する項目に関しては楽天RMS WEB APIのドキュメント「拡張サービス一覧＞WEB APIサービス＞RMS WEB SERVICE : ItemAPI」(要ログイン)にて。
+取得や更新する項目に関しては楽天 RMS WEB API のドキュメント「拡張サービス一覧＞ WEB API サービス＞ RMS WEB SERVICE : ItemAPI」(要ログイン)にて。
 
 ### Initialize
 
-RMS内の「拡張サービス一覧＞WEB APIサービス＞利用設定」にあるserviceSecretとlicenseKeyが必要です(事前にWEB APIの利用申し込みが必要です)。
+RMS 内の「拡張サービス一覧＞ WEB API サービス＞利用設定」にある serviceSecret と licenseKey が必要です(事前に WEB API の利用申し込みが必要です)。
 
 ```ruby
 client = RmsItemApi::Client.new(
@@ -29,7 +30,7 @@ client = RmsItemApi::Client.new(
 
 ### Get
 
-RMSに登録している商品情報を商品管理番号を指定して取得することができます。
+RMS に登録している商品情報を商品管理番号を指定して取得することができます。
 
 ```ruby
 item = client.get('test123')
@@ -47,7 +48,7 @@ item.all
 
 ### Insert
 
-RMSに商品情報を登録することができます。
+RMS に商品情報を登録することができます。
 
 ```ruby
 item = client.insert({
@@ -70,7 +71,7 @@ item.is_success?
 
 ### Update
 
-RMSに登録されている商品情報を更新することができます。
+RMS に登録されている商品情報を更新することができます。
 
 ```ruby
 item = client.update({
@@ -87,7 +88,7 @@ item = client.update({
 
 ### Delete
 
-RMSに登録されている商品情報を削除することができます。
+RMS に登録されている商品情報を削除することができます。
 
 ```ruby
 item = client.delete({

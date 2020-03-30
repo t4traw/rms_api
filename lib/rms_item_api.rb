@@ -1,4 +1,4 @@
-require "rms_item_api/version"
+require 'rms_item_api/version'
 require 'rms_item_api/helper.rb'
 require 'rms_item_api/item.rb'
 
@@ -18,7 +18,6 @@ module RmsItemApi
       @serviceSecret = serviceSecret
       @licenseKey = licenseKey
     end
-
   end
 end
 

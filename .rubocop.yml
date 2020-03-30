@@ -1,0 +1,33 @@
+AllCops:
+  TargetRubyVersion: 2.6
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Exclude:
+    - "test/**/*"
+
+Metrics/LineLength:
+  Max: 120
+
+# 3.0で文字列がデフォルトでfrozenになるか不明
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# コメントの日本語を許可
+Style/AsciiComments:
+  Enabled: false
+
+# 明示的に else で nil を返すのはわかりやすいので許可
+Style/EmptyElse:
+  EnforcedStyle: empty
+
+Style/Documentation:
+  Enabled: false
+
+Style/PredicateName:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Naming/VariableName:
+  Enabled: false
