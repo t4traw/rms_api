@@ -1,4 +1,6 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-# Specify your gem's dependencies in rms_item_api.gemspec
+# Specify your gem's dependencies in rms_api.gemspec
 gemspec
+
+gem "rake", "~> 12.0"

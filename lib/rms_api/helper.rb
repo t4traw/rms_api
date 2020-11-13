@@ -1,8 +1,9 @@
-module RmsItemApi
+module RmsApi
   module Helper
-    ENDPOINT = 'https://api.rms.rakuten.co.jp/es/1.0/item/'.freeze
-    def connection(method)
-      Faraday.new(url: ENDPOINT + method) do |conn|
+    ENDPOINT_BASE = 'https://api.rms.rakuten.co.jp/es/1.0/'.freeze
+
+    def connection(service:, method:)
+      Faraday.new(url: ENDPOINT_BASE + "#{service}/#{method}") do |conn|
         conn.adapter(Faraday.default_adapter)
         conn.headers['Authorization'] = encoded_key
       end

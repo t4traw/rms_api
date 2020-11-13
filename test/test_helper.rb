@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-require 'rms_item_api'
+require 'rms_api'
 
 require 'minitest/autorun'
 require 'minitest/reporters'
@@ -26,7 +26,7 @@ end
 module TestHelper
   module Client
     def client
-      RmsItemApi::Client.new(
+      RmsApi::Client.new(
         serviceSecret: ENV['YOUR_SERVICESECRET'],
         licenseKey: ENV['YOUR_LICENSEKEY']
       )

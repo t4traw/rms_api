@@ -1,13 +1,14 @@
 /.bundle/
 /.yardoc
-/Gemfile.lock
 /_yardoc/
 /coverage/
 /doc/
 /pkg/
 /spec/reports/
 /tmp/
-
+/Gemfile.lock
+/sample*
 .env
-.rbenv-gemsets
-sample*
+
+# rspec failure tracking
+.rspec_status

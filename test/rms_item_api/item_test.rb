@@ -1,7 +1,7 @@
-require 'rms_item_api'
+require 'rms_api'
 require 'test_helper'
 
-class RmsItemApiTest < Minitest::Test
+class RmsApiTest < Minitest::Test
   include TestHelper::Client
 
   def test_item_get

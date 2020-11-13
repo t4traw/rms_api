@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class RmsItemApiTest < Minitest::Test
+class RmsApiTest < Minitest::Test
   def test_that_it_has_a_version_number
-    refute_nil ::RmsItemApi::VERSION
+    refute_nil ::RmsApi::VERSION
   end
 end

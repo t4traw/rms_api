@@ -1,36 +1,38 @@
-# RmsItemApi
+# RmsApi
 
-[![Build Status](https://travis-ci.org/t4traw/rms_item_api.svg?branch=master)](https://travis-ci.org/t4traw/rms_item_api)
-[![Code Climate](https://codeclimate.com/github/t4traw/rms_item_api/badges/gpa.svg)](https://codeclimate.com/github/t4traw/rms_item_api)
+[![Build Status](https://travis-ci.org/t4traw/rms_api.svg?branch=master)](https://travis-ci.org/t4traw/rms_api)
+[![Code Climate](https://codeclimate.com/github/t4traw/rms_api/badges/gpa.svg)](https://codeclimate.com/github/t4traw/rms_api)
 
-楽天市場に出店している店舗が使える RMS の商品 API を叩くための ruby ラッパーです。シンプルな CRUD(作成、取得、更新、削除)のみを実装してあります。検索と複数更新は必要があれば追加したいと思います。
+楽天市場に出店している店舗が使えるRMSのAPIを叩くためのrubyラッパーです。
+
+## 現在対応しているAPI
+
+- Item API（作成、取得、更新、削除）
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
 ```ruby
-gem 'rms_item_api'
+gem 'rms_api'
 ```
 
 ## Usage
 
-取得や更新する項目に関しては楽天 RMS WEB API のドキュメント「拡張サービス一覧＞ WEB API サービス＞ RMS WEB SERVICE : ItemAPI」(要ログイン)にて。
+RMS内の「拡張サービス一覧＞ WEB APIサービス＞利用設定」にあるserviceSecretとlicenseKeyが必要です（事前にWEB APIの利用申し込みが必要です）。
 
 ### Initialize
 
-RMS 内の「拡張サービス一覧＞ WEB API サービス＞利用設定」にある serviceSecret と licenseKey が必要です(事前に WEB API の利用申し込みが必要です)。
-
 ```ruby
-client = RmsItemApi::Client.new(
-  serviceSecret: "your_serviceSecret",
-  licenseKey: "your_licenseKey"
+client = RmsApi::Client.new(
+  serviceSecret: "YOUR_SERVICE_SECRET",
+  licenseKey: "YOUR_LICENSE_KEY"
 )
 ```
 
-### Get
+## Item API
 
-RMS に登録している商品情報を商品管理番号を指定して取得することができます。
+取得や更新する項目に関しては楽天RMS WEB APIのドキュメント「拡張サービス一覧＞ WEB APIサービス＞ RMS WEB SERVICE : ItemAPI」（要ログイン）などを確認してください。
+
+RMSに登録している商品情報を商品管理番号を指定して取得できます。
 
 ```ruby
 item = client.get('test123')
@@ -48,7 +50,7 @@ item.all
 
 ### Insert
 
-RMS に商品情報を登録することができます。
+RMSに商品情報を登録できます。
 
 ```ruby
 item = client.insert({
@@ -64,34 +66,23 @@ item = client.insert({
   item_layout: 2,
   is_included_postage: true
 })
-
-# 正常なレスポンスが返ってきているかをtrue/falseで返します
-item.is_success?
 ```
 
-### Update
+## Development
 
-RMS に登録されている商品情報を更新することができます。
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-```ruby
-item = client.update({
-  item_url: 'test123',
-  item_name: 'api_update_test_item',
-  item_price: '198000',
-  categories: {
-    categoryInfo: {
-      categoryId: '0000000123'
-    }
-  }
-})
-```
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-### Delete
+## Contributing
 
-RMS に登録されている商品情報を削除することができます。
+Bug reports and pull requests are welcome on GitHub at https://github.com/t4traw/rms_api. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/t4traw/rms_api/blob/master/CODE_OF_CONDUCT.md).
 
-```ruby
-item = client.delete({
-  item_url: 'test123',
-})
-```
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Code of Conduct
+
+Everyone interacting in the RmsApi project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/t4traw/rms_api/blob/master/CODE_OF_CONDUCT.md).
