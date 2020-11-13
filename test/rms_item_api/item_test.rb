@@ -2,7 +2,12 @@ require 'rms_api'
 require 'test_helper'
 
 class RmsApiTest < Minitest::Test
-  include TestHelper::Client
+  def setup
+    RmsApi.configure do |config|
+      config.service_secret = "YOUR_SERVICE_SECRET"
+      config.license_key = "YOUR_LICENSE_KEY"
+    end
+  end
 
   def test_item_get
     expect_inventory_data = {
@@ -19,7 +24,7 @@ class RmsApiTest < Minitest::Test
       }
     }
     VCR.use_cassette('item/test_item_get') do
-      item = client.get('test1234')
+      item = RmsApi::Item.get('test1234')
       assert_equal true, item.is_success?
       assert_equal 'test_item', item.item_name
       assert_equal expect_inventory_data, item.item_inventory
@@ -62,7 +67,7 @@ class RmsApiTest < Minitest::Test
       }
     }
     VCR.use_cassette('item/test_item_insert') do
-      item = client.insert(insert_data)
+      item = RmsApi::Item.insert(insert_data)
       assert_equal true, item.is_success?
     end
   end
@@ -79,7 +84,7 @@ class RmsApiTest < Minitest::Test
       '在庫タイプ欄がありません。登録の場合は、必ず在庫タイプをご指定ください。'
     ]
     VCR.use_cassette('item/test_item_insert_error') do
-      item = client.insert(insert_data)
+      item = RmsApi::Item.insert(insert_data)
       assert_equal false, item.is_success?
       assert_equal expect_errors, item.errors
       assert_equal '不要なデータが入っています。', item.message
@@ -92,9 +97,9 @@ class RmsApiTest < Minitest::Test
       item_name: 'changed_item'
     }
     VCR.use_cassette('item/test_item_update') do
-      assert_equal 'test_item', client.get(update_data[:item_url]).item_name
-      assert_equal true, client.update(update_data).is_success?
-      assert_equal 'changed_item', client.get(update_data[:item_url]).item_name
+      assert_equal 'test_item', RmsApi::Item.get(update_data[:item_url]).item_name
+      assert_equal true, RmsApi::Item.update(update_data).is_success?
+      assert_equal 'changed_item', RmsApi::Item.get(update_data[:item_url]).item_name
     end
   end
 
@@ -103,8 +108,8 @@ class RmsApiTest < Minitest::Test
       item_url: 'test1234'
     }
     VCR.use_cassette('item/test_item_delete') do
-      assert_equal true, client.delete(delete_data).is_success?
-      item = client.get(delete_data[:item_url])
+      assert_equal true, RmsApi::Item.delete(delete_data).is_success?
+      item = RmsApi::Item.get(delete_data[:item_url])
       assert_equal false, item.is_success?
       assert_equal '該当する商品IDは存在しません。', item.message
     end

@@ -1,6 +1,6 @@
 module RmsApi
   module Item
-    include RmsApi::Helper
+    extend RmsApi::Helper
 
     def delete(item_data)
       request_xml = { itemDeleteRequest: { item: item_data } }.to_xml(
@@ -9,5 +9,7 @@ module RmsApi
       response = connection(service: :item, method: :delete).post { |r| r.body = request_xml }
       handler response
     end
+
+    module_function :delete
   end
 end

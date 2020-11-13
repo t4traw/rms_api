@@ -21,11 +21,18 @@ RMS内の「拡張サービス一覧＞ WEB APIサービス＞利用設定」に
 
 ### Initialize
 
+```sh
+export RMS_SERVICE_SECRET="YOUR_SERVICE_SECRET"
+export RMS_LICENSE_KEY="YOUR_LICENSE_KEY"
+```
+
+もしくはconfigureで初期設定ができます。
+
 ```ruby
-client = RmsApi::Client.new(
-  serviceSecret: "YOUR_SERVICE_SECRET",
-  licenseKey: "YOUR_LICENSE_KEY"
-)
+RmsApi.configure do |config|
+  config.service_secret = "YOUR_SERVICE_SECRET"
+  config.license_key = "YOUR_LICENSE_KEY"
+end
 ```
 
 ## Item API
@@ -35,17 +42,17 @@ client = RmsApi::Client.new(
 RMSに登録している商品情報を商品管理番号を指定して取得できます。
 
 ```ruby
-item = client.get('test123')
+response = RmsApi::Item.get('test123')
 
 # 正常なレスポンスが返ってきているかをtrue/falseで返します
-item.is_success?
+response.is_success?
 
 # 商品名を取得
-item.item_name
+response.item_name
 # 表示価格を取得
-item.item_price
+response.item_price
 # 全ての取得データをhashで出力します
-item.all
+response.all
 ```
 
 ### Insert
@@ -53,7 +60,7 @@ item.all
 RMSに商品情報を登録できます。
 
 ```ruby
-item = client.insert({
+response = RmsApi::Item.insert({
   item_url: 'test123',
   item_name: 'api_insert_test_item',
   item_price: '298000',

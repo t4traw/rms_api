@@ -1,6 +1,6 @@
 module RmsApi
   module Item
-    include RmsApi::Helper
+    extend RmsApi::Helper
 
     def insert(item_data)
       request_xml = { itemInsertRequest: { item: item_data } }.to_xml(
@@ -9,5 +9,7 @@ module RmsApi
       response = connection(service: :item, method: :insert).post { |r| r.body = request_xml }
       handler response
     end
+
+    module_function :insert
   end
 end

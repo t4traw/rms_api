@@ -25,12 +25,20 @@ module RmsApi
     private
 
     def encoded_key
-      if @serviceSecret.blank? && @licenseKey.blank?
+      if service_secret.blank? && license_key.blank?
         error_msg = 'serviceSecret and licenseKey are required'
         raise StandardError, error_msg
       else
-        'ESA ' + Base64.strict_encode64(@serviceSecret + ':' + @licenseKey)
+        'ESA ' + Base64.strict_encode64(service_secret + ':' + license_key)
       end
+    end
+
+    def service_secret
+      RmsApi.configuration.service_secret
+    end
+
+    def license_key
+      RmsApi.configuration.license_key
     end
 
     def check_system_status(rexml)

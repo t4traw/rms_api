@@ -22,14 +22,3 @@ VCR.configure do |c|
     i.request.headers.delete('Authorization')
   end
 end
-
-module TestHelper
-  module Client
-    def client
-      RmsApi::Client.new(
-        serviceSecret: ENV['YOUR_SERVICESECRET'],
-        licenseKey: ENV['YOUR_LICENSEKEY']
-      )
-    end
-  end
-end
