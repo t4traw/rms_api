@@ -51,7 +51,7 @@ response.is_success?
 response.item_name
 # 表示価格を取得
 response.item_price
-# 全ての取得データをhashで出力します
+# 全ての商品データをhashで取得します
 response.all
 ```
 
